@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 import os
 from typing_extensions import LiteralString
 from psycopg_pool import AsyncConnectionPool
+from psycopg.abc import Params
 
 pool = AsyncConnectionPool(
     conninfo=os.getenv("DATABASE_URL") or "",
@@ -17,10 +18,28 @@ async def get_db_connection():
         yield connection
 
 
-async def execute_query(query: LiteralString, *args):
+@asynccontextmanager
+async def get_db_cursor():
     async with get_db_connection() as connection:
         async with connection.cursor() as cursor:
-            await cursor.execute(query=query, params=args)
+            yield cursor
+
+
+async def execute_query(query: LiteralString, params: Params | None = None):
+    async with get_db_cursor() as cursor:
+        await cursor.execute(query=query, params=params)
+
+
+async def execute_and_fetchall(query: LiteralString, params: Params | None = None):
+    async with get_db_cursor() as cursor:
+        await cursor.execute(query=query, params=params)
+        return await cursor.fetchall()
+
+
+async def execute_and_fetchone(query: LiteralString, params: Params | None = None):
+    async with get_db_cursor() as cursor:
+        await cursor.execute(query=query, params=params)
+        return await cursor.fetchone()
 
 
 async def create_tables():
