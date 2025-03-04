@@ -1,8 +1,14 @@
 from pydantic import BaseModel
+from typing_extensions import TypedDict
+
+
+class LLMMessage(TypedDict):
+    kind: str
+    parts: list[dict]
 
 
 class MessageBase(BaseModel):
-    content: list[dict] | dict
+    content: dict
 
 
 class Message(MessageBase):
