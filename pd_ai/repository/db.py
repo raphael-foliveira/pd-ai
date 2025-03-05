@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+from psycopg.abc import Query
 import os
 from typing_extensions import LiteralString
 from psycopg_pool import AsyncConnectionPool
@@ -30,7 +31,7 @@ async def execute_query(query: LiteralString, params: Params | None = None):
         await cursor.execute(query=query, params=params)
 
 
-async def execute_and_fetchall(query: LiteralString, params: Params | None = None):
+async def execute_and_fetchall(query: Query, params: Params | None = None):
     async with get_db_cursor() as cursor:
         await cursor.execute(query=query, params=params)
         return await cursor.fetchall()
