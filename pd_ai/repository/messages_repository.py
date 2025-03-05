@@ -15,7 +15,7 @@ async def create(message: models.MessageBase) -> models.Message:
 
 
 async def get_all() -> list[models.Message]:
-    rows = await execute_and_fetchall("SELECT id, content FROM messages")
+    rows = await execute_and_fetchall("SELECT id, content FROM messages ORDER BY id")
     return [models.Message(id=row[0], content=row[1]) for row in rows]
 
 

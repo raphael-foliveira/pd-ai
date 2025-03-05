@@ -32,7 +32,6 @@ async def chat_loop():
             break
 
         messages: list[ModelMessage] = await model_message_adapter.get_messages()
-        print(messages)
         response = await agent.run(
             user_prompt=user_prompt,
             message_history=messages,

@@ -1,4 +1,4 @@
-from pydantic_ai.messages import ModelMessage
+from pydantic_ai.messages import ModelMessage, ToolCallPart
 from pd_ai.repository import messages_repository
 from pd_ai.helpers import ModelMessageTypeAdapter
 from pd_ai import models
