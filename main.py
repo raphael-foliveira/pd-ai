@@ -1,3 +1,4 @@
+import logging
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -31,6 +32,7 @@ async def chat_loop():
             break
 
         messages: list[ModelMessage] = await model_message_adapter.get_messages()
+        print(messages)
         response = await agent.run(
             user_prompt=user_prompt,
             message_history=messages,
@@ -46,6 +48,8 @@ async def main():
     await db.create_tables()
     try:
         await chat_loop()
+    except Exception:
+        logging.exception("An error occurred in the chat loop")
     finally:
         await db.pool.close()
 
