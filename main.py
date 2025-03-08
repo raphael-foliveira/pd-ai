@@ -1,8 +1,5 @@
+import config
 import logging
-from dotenv import load_dotenv
-
-load_dotenv()
-
 import asyncio
 from pd_ai.agent import agent
 from pydantic_ai.agent import AgentRunResult

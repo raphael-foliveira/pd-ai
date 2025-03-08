@@ -1,12 +1,13 @@
 from contextlib import asynccontextmanager
 from psycopg.abc import Query
-import os
 from typing_extensions import LiteralString
 from psycopg_pool import AsyncConnectionPool
 from psycopg.abc import Params
 
+import config
+
 pool = AsyncConnectionPool(
-    conninfo=os.getenv("DATABASE_URL") or "",
+    conninfo=config.DATABASE_URL,
     open=False,
     min_size=1,
     max_size=10,

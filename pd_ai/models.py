@@ -8,7 +8,7 @@ class LLMMessage(TypedDict):
 
 
 class MessageBase(BaseModel):
-    content: dict
+    content: list[dict] | dict
 
 
 class Message(MessageBase):

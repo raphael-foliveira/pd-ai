@@ -24,6 +24,7 @@ def terminate_conversation() -> str:
 @agent.tool_plain
 def run_python(code: str) -> str:
     """Runs python code"""
+    print("running python code...")
     try:
         exec(code)
         return "Code executed"
@@ -32,8 +33,9 @@ def run_python(code: str) -> str:
 
 
 @agent.tool_plain
-async def make_httpx_request(url: str) -> str:
-    """Makes a request to a URL using httpx"""
+async def get_url(url: str) -> str:
+    """Makes a GET request to an URL using httpx"""
+    print("sending get request...")
     response = await async_client.get(url)
     return response.text
 
@@ -41,6 +43,7 @@ async def make_httpx_request(url: str) -> str:
 @agent.tool_plain
 async def get_file_tree() -> str:
     """Gets the file tree of the current project"""
+    print("getting the file tree for the current project...")
     result = subprocess.run("tree", capture_output=True, text=True)
     return result.stdout
 
@@ -50,6 +53,7 @@ async def cat_file(
     file_path: str = Field(description="The path to the file to be read"),
 ):
     """Reads the contents of a file"""
+    print(f"reading file ({file_path}")
     result = subprocess.run(["cat", file_path], capture_output=True, text=True)
     return result.stdout
 
@@ -57,6 +61,7 @@ async def cat_file(
 @agent.tool_plain
 async def run_shell_command(command: str = Field("The shell command to run")) -> str:
     """Runs a shell command"""
+    print(f"running shell command: {command}")
     result = subprocess.run(command, capture_output=True, text=True, shell=True)
     return result.stdout
 
@@ -67,6 +72,7 @@ async def create_text_file(
     content: str = Field("The contents of the file"),
 ):
     """Creates or overwrites a text file"""
+    print(f"creating text file in {path}")
     with open(path, "w") as f:
         f.write(content)
     return f"File saved at {path}"
