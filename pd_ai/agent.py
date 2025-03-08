@@ -22,14 +22,16 @@ def terminate_conversation() -> str:
 
 
 @agent.tool_plain
-def run_python(code: str) -> str:
+def run_python(code: str):
     """Runs python code"""
     print("running python code...")
     try:
-        exec(code)
-        return "Code executed"
+        exec_locals: dict = {}
+        exec(code, {}, exec_locals)
+        output = exec_locals.get("output")
+        return output
     except Exception as e:
-        return f"Error: {e}"
+        return f"Error: {str(e)}"
 
 
 @agent.tool_plain
@@ -44,7 +46,9 @@ async def get_url(url: str) -> str:
 async def get_file_tree() -> str:
     """Gets the file tree of the current project"""
     print("getting the file tree for the current project...")
-    result = subprocess.run("tree", capture_output=True, text=True)
+    result = subprocess.run(
+        ["tree", "-I", "__pycache__"], capture_output=True, text=True
+    )
     return result.stdout
 
 
@@ -53,7 +57,7 @@ async def cat_file(
     file_path: str = Field(description="The path to the file to be read"),
 ):
     """Reads the contents of a file"""
-    print(f"reading file ({file_path}")
+    print(f"reading file ({file_path})")
     result = subprocess.run(["cat", file_path], capture_output=True, text=True)
     return result.stdout
 
