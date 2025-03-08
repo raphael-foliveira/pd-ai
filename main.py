@@ -1,24 +1,11 @@
-import config
 import logging
 import asyncio
 from pd_ai.agent import agent
-from pydantic_ai.agent import AgentRunResult
 from pydantic_ai.messages import (
     ModelMessage,
-    ToolCallPart,
 )
 from pd_ai.repository import db
 from pd_ai.adapters import model_message_adapter
-
-
-def print_all_messages(response: AgentRunResult[str]):
-    for m in response.all_messages():
-        for p in m.parts:
-            if isinstance(p, ToolCallPart):
-                print(f"Tool: {p.tool_name}")
-                print(f"Args: {p.args}")
-            else:
-                print(f"System: {p.content}")
 
 
 async def chat_loop():
