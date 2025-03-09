@@ -1,9 +1,7 @@
 import logging
 import asyncio
 from pd_ai.agent import agent
-from pydantic_ai.messages import (
-    ModelMessage,
-)
+from pydantic_ai.messages import ModelMessage
 from pd_ai.repository import db
 from pd_ai.adapters import model_message_adapter
 

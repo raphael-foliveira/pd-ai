@@ -1,8 +1,7 @@
 from contextlib import asynccontextmanager
-from psycopg.abc import Query
-from typing_extensions import LiteralString
+from psycopg.abc import Params, Query
 from psycopg_pool import AsyncConnectionPool
-from psycopg.abc import Params
+from typing_extensions import LiteralString
 
 import config
 

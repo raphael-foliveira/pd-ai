@@ -1,8 +1,7 @@
-from pd_ai.async_client import async_client
-from pydantic import Field
 import subprocess
+from pydantic import Field
 from pydantic_ai import Agent
-
+from pd_ai.async_client import async_client
 
 agent = Agent(
     model="gpt-4o-mini",
@@ -13,8 +12,7 @@ agent = Agent(
 
 @agent.tool_plain
 def terminate_conversation() -> str:
-    """
-    Terminates the conversation and the program
+    """Terminates the conversation and the program
     The conversation must be terminated whenever the user is rude or offends Jason
     """
     print("Exiting...")
@@ -31,7 +29,7 @@ def run_python(code: str):
         output = exec_locals.get("output")
         return output
     except Exception as e:
-        return f"Error: {str(e)}"
+        return f"Error: {e!s}"
 
 
 @agent.tool_plain
@@ -47,7 +45,10 @@ async def get_file_tree() -> str:
     """Gets the file tree of the current project"""
     print("getting the file tree for the current project...")
     result = subprocess.run(
-        ["tree", "-I", "__pycache__"], capture_output=True, text=True
+        ["tree", "-I", "__pycache__"],
+        capture_output=True,
+        text=True,
+        check=False,
     )
     return result.stdout
 
@@ -58,7 +59,9 @@ async def cat_file(
 ):
     """Reads the contents of a file"""
     print(f"reading file ({file_path})")
-    result = subprocess.run(["cat", file_path], capture_output=True, text=True)
+    result = subprocess.run(
+        ["cat", file_path], capture_output=True, text=True, check=False
+    )
     return result.stdout
 
 
@@ -66,7 +69,9 @@ async def cat_file(
 async def run_shell_command(command: str = Field("The shell command to run")) -> str:
     """Runs a shell command"""
     print(f"running shell command: {command}")
-    result = subprocess.run(command, capture_output=True, text=True, shell=True)
+    result = subprocess.run(
+        command, capture_output=True, text=True, shell=True, check=False
+    )
     return result.stdout
 
 
